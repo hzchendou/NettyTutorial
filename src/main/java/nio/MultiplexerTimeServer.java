@@ -82,6 +82,7 @@ public class MultiplexerTimeServer implements Runnable {
                     try {
                         handleInput(key);
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                         //关闭资源
                         if (key != null) {
                             key.cancel();

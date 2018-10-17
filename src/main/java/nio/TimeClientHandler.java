@@ -16,7 +16,7 @@ import java.util.Set;
  * @date 18-10-16
  * @since 1.0
  */
-public class TimeClientHandle implements Runnable {
+public class TimeClientHandler implements Runnable {
 
     private String host;
 
@@ -28,7 +28,7 @@ public class TimeClientHandle implements Runnable {
 
     private volatile boolean stop;
 
-    public TimeClientHandle(String host, int port) {
+    public TimeClientHandler(String host, int port) {
         this.host = host == null ? "127.0.0.1" : host;
         this.port = port;
 
@@ -97,6 +97,7 @@ public class TimeClientHandle implements Runnable {
                 //完成连接
                 if (sc.finishConnect()) {
                     sc.register(selector, SelectionKey.OP_READ);
+                    doWrite(sc);
                 } else {
                     //连接失败
                     System.exit(-1);
@@ -130,6 +131,7 @@ public class TimeClientHandle implements Runnable {
         } else {
             socketChannel.register(selector, SelectionKey.OP_CONNECT);
         }
+        System.out.println("发送连接请求,请求状态：" + connected);
     }
 
     private void doWrite(SocketChannel sc) throws IOException {
