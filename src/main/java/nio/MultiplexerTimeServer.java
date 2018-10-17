@@ -49,7 +49,7 @@ public class MultiplexerTimeServer implements Runnable {
             //设置非阻塞模式
             serverChannel.configureBlocking(false);
             //绑定本地端口
-            serverChannel.socket().bind(new InetSocketAddress("127.0.0.1", port));
+            serverChannel.socket().bind(new InetSocketAddress("127.0.0.1", port), 1024);
             //注册到selector中,监听新链接事件
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
             System.out.println("The time server is start in port:" + port);
@@ -130,6 +130,7 @@ public class MultiplexerTimeServer implements Runnable {
                             "Bad Order";
                     doWrite(sc, currentTime);
                 } else if (readBytes < 0) {
+                    System.out.println("客户端断开连接:" + sc.isConnectionPending());
                     key.cancel();
                     sc.close();
                 }

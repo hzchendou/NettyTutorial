@@ -68,6 +68,7 @@ public class TimeClientHandler implements Runnable {
                                 key.channel().close();
                             }
                         }
+                        ex.printStackTrace();
                     }
                 }
             } catch (IOException e) {
@@ -109,12 +110,14 @@ public class TimeClientHandler implements Runnable {
                 if (readBytes > 0) {
                     readBuffer.flip();
                     byte[]bytes = new byte[readBuffer.remaining()];
+                    readBuffer.get(bytes);
                     String body = new String(bytes, "UTF-8");
                     System.out.println("Now is :" + body);
                     this.stop = true;
                 } else if (readBytes < 0){
                     key.cancel();
                     sc.close();
+                    stop = true;
                 }
             }
         }
@@ -137,7 +140,7 @@ public class TimeClientHandler implements Runnable {
     private void doWrite(SocketChannel sc) throws IOException {
         byte [] req = MultiplexerTimeServer.QUERY_TIME_ORDER.getBytes();
         ByteBuffer writeBuffer = ByteBuffer.allocate(req.length);
-        writeBuffer.put(writeBuffer);
+        writeBuffer.put(req);
         writeBuffer.flip();
         sc.write(writeBuffer);
         if (!writeBuffer.hasRemaining()) {
