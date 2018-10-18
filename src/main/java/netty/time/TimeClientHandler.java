@@ -14,7 +14,7 @@ import io.netty.channel.ChannelHandlerContext;
  */
 public class TimeClientHandler extends ChannelHandlerAdapter {
 
-    private final ByteBuf firstMessage;
+    protected final ByteBuf firstMessage;
 
     public TimeClientHandler() {
         byte[] req = TimeServerHandler.QUERY_TIME_ORDER.getBytes();
